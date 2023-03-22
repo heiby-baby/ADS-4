@@ -1,33 +1,5 @@
 // Copyright 2021 NNTU-CS
 
-int cbinsearch(int arr[], int len, int value, int l) {
-  int left = l, right = len - 1; 
-  int cnt = 0;
-  while (left <= right) { 
-    int mid = l + (left + right) / 2;
-    if (arr[mid] == value) {
-      cnt++;
-      int i = mid - 1;
-      while (i >= left && arr[i] == value) {
-        cnt++;
-        i--;
-      }
-      i = mid + 1;
-      while (i <= right && arr[i] == value) {
-        cnt++;
-        i++;
-      }
-      return cnt;
-    } else {
-        if (arr[mid] < value) {
-          left = mid + 1;
-        } else {
-          right = mid - 1;
-        }
-    }
-  return 0;
-}
-
 int countPairs1(int *arr, int len, int value) {
   int counter = 0;
   for (int i = 0; i < len; i++) {
@@ -55,13 +27,35 @@ int countPairs2(int *arr, int len, int value) {
 	}
   return counter;
 }
-int countPairs3(int *arr, int len, int value) {
-  int counter = 0;
-  int left = 0;
-  int right = len - 1;
-  for (int i = 0; i < right; i++) {
-    counter += cbinsearch(arr, len, value - arr[i], i);
+
+int countPairs3(int* arr, int len, int value) {
+	int counter = 0;
+	int right = len;
+	for (int i = 0; i < right; i++) {
+		int left = i;
+		int val = value - arr[i];
+		while (right - 1 > left) {
+			int mid = (left + right) / 2;
+			if (arr[mid] == val) {
+				counter++;
+				int middle = mid + 1;
+				while (arr[middle] == val && middle < right) {
+					counter++;
+					middle++;
+				}
+				middle = mid - 1;
+				while (arr[middle] == val && middle > left) {
+					counter++;
+					middle--;
+				}
+				break;
+			}
+			if (arr[mid] > val) {
+				right = mid;
+			} else {
+        left = mid;
+			}
+		}
 	}
 	return counter;
-  return 0;
 }
